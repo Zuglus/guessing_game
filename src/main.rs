@@ -7,21 +7,37 @@ fn main() {
     println!("Загаданное число: {}", guessed_number);
 
     println!("Угадайте число!");
-    println!("Ваш вариант?");
+    let mut question = "Ваш вариант?";
 
-    let mut user_guess = String::new();
+    loop {
+        println!("{}", question);
 
-    std::io::stdin()
-        .read_line(&mut user_guess)
-        .expect("Ошибка при чтении ввода");
+        let mut user_guess = String::new();
 
-    let user_guess: u32 = user_guess.trim().parse().expect("Необходимо ввести число!!!");
+        std::io::stdin()
+            .read_line(&mut user_guess)
+            .expect("Ошибка при чтении ввода");
 
-    println!("Вы ввели: {}", user_guess);
+        let user_guess: u32 = user_guess
+            .trim()
+            .parse()
+            .expect("Необходимо ввести число!!!");
 
-    match user_guess.cmp(&guessed_number) {
-        Ordering::Less => println!("Маловато будет..."),
-        Ordering::Greater => println!("Большевато будет..."),
-        Ordering::Equal => println!("Удивительно!!! Вы угадали!"),
+        println!("\nВы ввели: {}", user_guess);
+
+        match user_guess.cmp(&guessed_number) {
+            Ordering::Less => {
+                println!("Маловато будет...");
+                question = "Что-то побольше?";
+            }
+            Ordering::Greater => {
+                println!("Большевато будет...");
+                question = "Поменьше, поменьше.";
+            }
+            Ordering::Equal => {
+                println!("Удивительно!!! Вы угадали!");
+                break;
+            }
+        }
     }
 }
