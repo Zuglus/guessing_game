@@ -4,7 +4,6 @@ use rand::Rng;
 
 fn main() {
     let guessed_number = rand::thread_rng().gen_range(1..=100);
-    println!("Загаданное число: {}", guessed_number);
 
     println!("Угадайте число!");
     let mut question = "Ваш вариант?";
@@ -18,10 +17,14 @@ fn main() {
             .read_line(&mut user_guess)
             .expect("Ошибка при чтении ввода");
 
-        let user_guess: u32 = user_guess
-            .trim()
-            .parse()
-            .expect("Необходимо ввести число!!!");
+        let user_guess: u32 = match user_guess.trim().parse() {
+            Ok(number) => number,
+            Err(_) => {
+                println!("\nОй! Ой! Число состоит только из циферок)))");
+                question = "Вводим число, число!";
+                continue;
+            }
+        };
 
         println!("\nВы ввели: {}", user_guess);
 
