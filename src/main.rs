@@ -5,8 +5,10 @@ use rand::Rng;
 fn main() {
     let guessed_number = rand::thread_rng().gen_range(1..=100);
 
-    println!("Угадайте число!");
+    println!("\nУгадайте число!");
     let mut question = "Ваш вариант?";
+
+    let mut guess_numbers_list: Vec<u32> = Vec::new();
 
     loop {
         println!("{}", question);
@@ -34,12 +36,25 @@ fn main() {
                 question = "Что-то побольше?";
             }
             Ordering::Greater => {
-                println!("Большевато будет...");
+                println!("Многовато будет...");
                 question = "Поменьше, поменьше.";
             }
             Ordering::Equal => {
                 println!("Удивительно!!! Вы угадали!");
                 break;
+            }
+        };
+
+        match guess_numbers_list.len() {
+            0 => guess_numbers_list.push(user_guess),
+            5 => {
+                println!("Ну всё чего ли, игре конец! Загадали {}", guessed_number);
+                break;
+            }
+            _ => {
+                print!("Уже были: ");
+                println!("{}", guess_numbers_list.iter().fold(String::new(), |acc, &num| acc + &num.to_string() + " "));
+                guess_numbers_list.push(user_guess);
             }
         }
     }
